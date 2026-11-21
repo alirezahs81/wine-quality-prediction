@@ -152,10 +152,10 @@ df_combined = loader.load_data()
 
 | Model | CV RMSE (train) | Test RMSE | Test MAE | Test R² |
 |-------|----------------|-----------|----------|---------|
-| Random Forest ⭐ | ~0.58 | ~0.60 | ~0.45 | ~0.40 |
-| XGBoost | ~0.59 | ~0.61 | ~0.46 | ~0.38 |
-| Gradient Boosting | ~0.60 | ~0.62 | ~0.47 | ~0.35 |
-| Ridge/Linear | ~0.64 | ~0.66 | ~0.50 | ~0.25 |
+| Random Forest ⭐ | 0.625 | 0.607 | 0.435 | 0.50 |
+| XGBoost | 0.651 | ~0.63 | ~0.45 | ~0.45 |
+| Gradient Boosting | 0.678 | ~0.66 | ~0.48 | ~0.42 |
+| Ridge/Linear | 0.734 | ~0.73 | ~0.55 | ~0.27 |
 
 > The selected estimator is the one with the best cross-validated RMSE, refitted on the full training split and evaluated once on the held-out test split.
 

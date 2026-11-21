@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, StratifiedKFold
 from xgboost import XGBRegressor
 from src.config import MODEL_FILE, RANDOM_STATE, CV_FOLDS
 
@@ -40,18 +40,20 @@ class ModelTrainer:
     def train_and_evaluate(self, X_train, y_train, X_test, y_test):
         """Selects the best model by CV on the train split, fits it, and saves it."""
         
-        # Create stratification bins for cross-validation
+        # Stratified CV: split folds by quality bins so each fold has a
+        # similar quality distribution
         stratify_bins = self._create_quality_bins(y_train)
-        
+        cv_splitter = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
+
         best_cv_score = np.inf  # For RMSE, lower is better
 
         for name, model in self.models.items():
             print(f"Training {name}...")
-            
+
             # Use negative RMSE for cross_val_score (higher is better in sklearn)
             cv_scores = cross_val_score(
-                model, X_train, y_train, 
-                cv=CV_FOLDS, 
+                model, X_train, y_train,
+                cv=cv_splitter.split(X_train, stratify_bins),
                 scoring="neg_root_mean_squared_error", 
                 n_jobs=-1
             )
