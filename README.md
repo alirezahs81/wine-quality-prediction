@@ -38,7 +38,7 @@ The project uses the **UCI Wine Quality dataset** containing physicochemical pro
 wine-quality-prediction/
 │
 ├── data/
-│   └── raw/                 # Raw dataset (auto-generated if missing)
+│   └── raw/                 # Raw dataset (auto-downloaded from UCI on first run)
 ├── models/                  # Saved model + preprocessing pipeline (joblib)
 ├── src/
 │   ├── config.py            # Global configurations & paths

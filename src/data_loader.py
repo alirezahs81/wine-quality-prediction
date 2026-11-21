@@ -24,17 +24,51 @@ class DataLoader:
         else:
             self.data_path = data_path
 
+    # Direct-download mirrors of the UCI Wine Quality dataset (semicolon-separated)
+    UCI_URLS = {
+        "red": "https://raw.githubusercontent.com/zygmuntz/wine-quality/master/winequality/winequality-red.csv",
+        "white": "https://raw.githubusercontent.com/zygmuntz/wine-quality/master/winequality/winequality-white.csv",
+    }
+
     def load_data(self) -> pd.DataFrame:
-        """Loads data from CSV or generates sample data if not present."""
+        """Loads data from CSV; downloads the real UCI dataset if missing,
+        and only falls back to synthetic data when offline."""
         if os.path.exists(self.data_path):
             print(f"Loading data from local file: {self.data_path}")
             df = pd.read_csv(self.data_path)
             if "wine_type" not in df.columns and self.wine_type != "combined":
                 df["wine_type"] = self.wine_type
             return df
-        else:
-            print("Local dataset not found. Generating sample Wine Quality data...")
+
+        print("Local dataset not found. Downloading real UCI Wine Quality data...")
+        try:
+            return self._download_and_save()
+        except Exception as e:
+            print(f"Download failed ({e}). Falling back to synthetic sample data "
+                  "(quality is random - for pipeline demo only, do not trust metrics).")
             return self._generate_and_save_sample()
+
+    def _download_and_save(self) -> pd.DataFrame:
+        """Downloads the real UCI dataset and saves it in the expected CSV format."""
+        import urllib.request
+        from io import StringIO
+
+        parts = []
+        wanted = ("red", "white") if self.wine_type == "combined" else (self.wine_type,)
+        for kind in wanted:
+            req = urllib.request.Request(self.UCI_URLS[kind], headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                raw = resp.read().decode("utf-8")
+            df = pd.read_csv(StringIO(raw), sep=";")
+            df["wine_type"] = kind
+            parts.append(df)
+
+        combined = pd.concat(parts, ignore_index=True)
+
+        os.makedirs(os.path.dirname(self.data_path), exist_ok=True)
+        combined.to_csv(self.data_path, index=False)
+        print(f"UCI dataset downloaded and saved to {self.data_path}")
+        return combined
 
     def _generate_and_save_sample(self) -> pd.DataFrame:
         """Generates sample Wine Quality data based on UCI dataset statistics."""
