@@ -29,7 +29,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Syntax check
-        run: python -m compileall -q src main.py tests
+        run: python -m compileall -q src main.py tests scripts
+
+      - name: Fast-train model artifacts for inference tests
+        run: python scripts/train_ci.py
+        env:
+          CI_N_ESTIMATORS: "40"
 
       - name: Run unit tests
         run: pytest tests/ -v --tb=short
