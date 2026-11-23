@@ -1,0 +1,13 @@
+.git
+.venv
+venv
+__pycache__
+.pytest_cache
+.coverage
+htmlcov
+*.pyc
+.idea
+.vscode
+data/raw/*
+data/processed/*
+models/*.joblib
