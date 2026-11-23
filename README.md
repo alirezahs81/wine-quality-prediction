@@ -1,6 +1,7 @@
 # 🍷 Wine Quality Prediction System
 
-![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python&logoColor=white)
+[![CI](https://github.com/alirezahs81/wine-quality-prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/alirezahs81/wine-quality-prediction/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-F7931E?logo=scikit-learn&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-1.7+-EC6231?logo=xgboost&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
@@ -36,7 +37,6 @@ The project uses the **UCI Wine Quality dataset** containing physicochemical pro
 
 ```text
 wine-quality-prediction/
-│
 ├── data/
 │   └── raw/                 # Raw dataset (auto-downloaded from UCI on first run)
 ├── models/                  # Saved model + preprocessing pipeline (joblib)
@@ -48,17 +48,20 @@ wine-quality-prediction/
 │   ├── evaluate.py          # RMSE, MAE, R², MAPE + visualizations
 │   └── predict.py           # Inference pipeline for new wines
 ├── tests/                   # Automated unit tests with pytest
+├── .github/workflows/ci.yml # GitHub Actions CI
 ├── main.py                  # Main execution script
-└── requirements.txt
+├── requirements.txt
+└── LICENSE
 ```
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Navigate to Project Directory
+### 1. Clone the repository
 ```bash
-cd "Wine Quality Prediction"
+git clone https://github.com/alirezahs81/wine-quality-prediction.git
+cd wine-quality-prediction
 ```
 
 ### 2. Create a Virtual Environment
@@ -80,7 +83,7 @@ pip install -r requirements.txt
 ## 💻 Usage
 
 ### Run the Full Pipeline
-Downloads/generates the data, preprocesses it, trains and selects the best model, evaluates it, and runs sample inference:
+Downloads the data (if needed), preprocesses it, trains and selects the best model, evaluates it, and runs sample inference:
 ```bash
 python main.py
 ```
@@ -167,4 +170,4 @@ Developed with a clean, professional, and scalable Python Machine Learning archi
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
